@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-import urllib
+import urllib2
 
 import json
 import logging.config
@@ -124,7 +124,10 @@ def get_bundle(root_dir, relative_dir, url):
     retries = 0
     while retries < 3:
         try:
-            urllib.urlretrieve(url, bundle_file.name)
+            logger.debug("download #{} ...".format(retries))
+            download_file = urllib2.urlopen(url)
+            with open(bundle_file.name, 'wb') as fp:
+                fp.write(download_file.read())
             break
         except:
             retries += 1
